@@ -17,11 +17,20 @@ function AIMove()
             $(grid_id).html(''); // remove image from link
 
             var html_string = "<img class=\"pocnut\" src=\"/images/"; // html string of img tag
+            var new_grid = grid.substr(0, parseInt(id) - 1); // new grid state
 
-            if (first) html_string += "Donut.png"; // if player first, use Donut
-            else html_string += "Pocky.png"; // else use Pocky
+            if (first) {
+                html_string += "Donut.png"; // if player first, use Donut
+                new_grid += "O";
+            }
+            else {
+                html_string += "Pocky.png"; // else use Pocky
+                new_grid += "X";
+            }
 
             html_string += "\">";
+            if (parseInt(id) != 9) new_grid += grid.substr(parseInt(id));
+            grid = new_grid; // update grid state
 
             $(grid_id).append(html_string); // update grid picture
             lock = false; // release lock
@@ -39,7 +48,7 @@ function ShowGrid(_first) {
         success: function(html_string) { // html_string : return data from server
             $('#game').append(html_string); // add grid HTML string to page
             $('#game').fadeIn(500); // show grid, animation 500 ms
-
+            
             if (!_first) AIMove(); // if AI first, request for AI's move to server
             else lock = false; // release lock
         }
@@ -58,7 +67,9 @@ function HideSelection(_first) {
 }
 
 $(document).ready( // when page has loaded
-    function() {
+    function () {
+        console.log(grid);
+
         $('#Pocky').click( // Pocky on click
             function() {
                 if (!selected) { // first time selection
@@ -87,11 +98,21 @@ $(document).ready( // when page has loaded
                     $(grid_id).html(''); // remove image from link
 
                     var html_string = "<img class=\"pocnut\" src=\"/images/"; // html string of img tag
+                    var new_grid = grid.substr(0, parseInt(img_number) - 1); // new grid state
 
-                    if (first) html_string += "Pocky.png"; // if player first, use Pocky
-                    else html_string += "Donut.png"; // else use Donut
-
+                    if (first) {
+                        html_string += "Pocky.png"; // if player first, use Pocky
+                        new_grid += "X";
+                    }
+                    else {
+                        html_string += "Donut.png"; // else use Donut
+                        new_grid += "O";
+                    }
+                    
                     html_string += "\">";
+                    if (parseInt(img_number) != 9) new_grid += grid.substr(parseInt(img_number));
+                    grid = new_grid;  // update grid state
+                    console.log(grid);
 
                     $(grid_id).append(html_string); // update grid picture
                 }
