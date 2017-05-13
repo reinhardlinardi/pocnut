@@ -5,7 +5,7 @@ Pocnut is a web-based single-player Tic Tac Toe game with perfect AI. Pocnut's A
 ![Pocnut](screenshot.png)
 
 ### Deployment
-Pocnut has been deployed and now running on Microsoft Azure : [pocnut.azurewebsites.net](pocnut.azurewebsites.net).
+Pocnut has been deployed and now running on Microsoft Azure : http://pocnut.azurewebsites.net.
 
 ### License
 This project is licensed under MIT license.
