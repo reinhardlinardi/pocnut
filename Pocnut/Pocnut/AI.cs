@@ -11,7 +11,7 @@ namespace Pocnut
         public char mark { get; set; } // AI's mark (X or O)
         public char enemy_mark { get; set; } // player's mark
         public char[,] grid { get; set; } // grid state (in multidimensional char array)
-        public int best_move; // best move
+        public int best_move { get; set; } // best move
 
         /* Methods */
 

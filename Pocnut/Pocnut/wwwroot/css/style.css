@@ -63,3 +63,16 @@ div.bottom {
     border-bottom-width: 1px;
     border-bottom-color: gray;
 }
+
+button.restart {
+    /* Play again button */
+    background-color: #5ef2a8;
+    color: white;
+    font-family: "Geometria Light";
+    font-size: 16px;
+}
+
+button.restart:hover {
+    /* Play again button on hover */
+    color: white;
+}

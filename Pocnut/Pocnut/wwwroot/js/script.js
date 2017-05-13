@@ -5,8 +5,40 @@ var first; // true = player first, false = AI first
 var lock = true; // true = grid locked, cannot be clicked
 var grid = "EEEEEEEEE"; // X = X, O = O, E = empty
 
-function CheckGameOver(turn) // true = player's turn next, false = AI's turn next
-{
+function ShowMessage(val) {
+    var html_string = "<button type=\"button\" class=\"btn restart\">Play again!</button>"; // html string of restart button
+    var message = ""; // message
+
+    if (val == 2) { // if AI wins
+        message = "AI wins!";
+
+        if (first) {
+            $('#donut-message').text(message); // show message
+            $('#donut-container').append(html_string); // add restart button
+        }
+        else {
+            $('#pocky-message').text(message); // show message
+            $('#pocky-container').append(html_string); // add restart button
+        }
+    }
+    else {
+        if (val == 1) message = "Draw!"; // if game draw
+        else message = "Player wins!"; // else player wins
+
+        if (first) {
+            $('#donut-message').text('');
+            $('#pocky-message').text(message); // show message
+            $('#pocky-container').append(html_string); // add restart button
+        }
+        else {
+            $('#pocky-message').text('');
+            $('#donut-message').text(message); // show message
+            $('#donut-container').append(html_string); // add restart button
+        }
+    }
+}
+
+function CheckGameOver(turn) { // true = player's turn next, false = AI's turn next
     $.ajax({ // request for game state
         url: '/Home/CheckGameOver',
         type: 'POST',
@@ -16,34 +48,42 @@ function CheckGameOver(turn) // true = player's turn next, false = AI's turn nex
             var val = parseInt(game_state_value);
 
             if (val == 0) { // game is not over
-                if (turn) lock = false; // release lock
+                if (turn) {
+                    lock = false; // release lock
+
+                    if (first) {
+                        $('#donut-message').text('');
+                        $('#pocky-message').text('Your turn.'); // change message
+                    }
+                    else {
+                        $('#pocky-message').text('');
+                        $('#donut-message').text('Your turn.'); // change message
+                    }
+                }
                 else AIMove(); // request for AI's move to server
             }
-            else if (val == 1) { // game draws
-                if (first) $('#pocky-message').text('Draw!');
-                else $('#donut-message').text('Draw!');
-            }
-            else if (val == 2) { // AI wins
-                if (first) $('#donut-message').text('AI wins!');
-                else $('#pocky-message').text('AI wins!');
-            }
-            else { // player wins
-                if (first) $('#pocky-message').text('Player wins!');
-                else $('#donut-message').text('Player wins!');
-            }
+            else ShowMessage(val); // show win or draw message
         }
     });
 }
 
-function AIMove()
-{
+function AIMove() {
+    if (first) {
+        $('#pocky-message').text('');
+        $('#donut-message').text('Processing...'); // change message
+    }
+    else {
+        $('#donut-message').text('');
+        $('#pocky-message').text('Processing...'); // change message
+    }
+
     $.ajax({ // request for AI's move
         url: '/Home/SendMove',
         type: 'POST',
         data: { first : first, grid : grid }, // data to be sent, key = parameter name, value = data
         dataType: 'text',
         success: function (id) {
-            var grid_id = "#grid-" + id; // grid id to be updated
+            var grid_id = "#grid-div-" + id; // grid id to be updated
             $(grid_id).html(''); // remove image from link
 
             var html_string = "<img class=\"pocnut\" src=\"/images/"; // html string of img tag
@@ -62,6 +102,7 @@ function AIMove()
             if (parseInt(id) != 9) new_grid += grid.substr(parseInt(id));
             grid = new_grid; // update grid state
 
+            $(grid_id).html(''); // remove link (not clickable anymore)
             $(grid_id).append(html_string); // update grid picture
             CheckGameOver(true); // check game state
         }
@@ -80,7 +121,12 @@ function ShowGrid(_first) {
             $('#game').fadeIn(500); // show grid, animation 500 ms
             
             if (!_first) AIMove(); // if AI first, request for AI's move to server
-            else lock = false; // release lock
+            else {
+                lock = false; // release lock
+
+                if (first) $('#pocky-message').text('Your turn.'); // show message
+                else $('#donut-message').text('Your turn.');
+            }
         }
     });
 }
@@ -93,12 +139,38 @@ function HideSelection(_first) {
         $('#game').html(''); // remove selection
     });
 
-    timer = setTimeout(function () { ShowGrid(_first); }, 500); // show grid in 500 ms
+    timer = setTimeout(function() { ShowGrid(_first); }, 500); // show grid in 500 ms
+}
+
+function ShowSelection() {
+    clearTimeout(timer); // clear timer
+
+    $.ajax({ // request for selection HTML string
+        url: '/Home/ShowSelection',
+        type: 'POST',
+        dataType: 'text',
+        success: function (html_string) {
+            $('#game').append(html_string); // add selection
+            $('#game').fadeIn(500); // show selection, animation 500 ms
+        }
+    });
+
+    selected = false; // reset selection status
+    lock = true; // reset lock
+    grid = "EEEEEEEEE"; // reset grid state
+}
+
+function HideGrid() {
+    $('#game').fadeOut(500, function () {
+        $('#game').html(''); // remove grid
+    });
+
+    timer = setTimeout(ShowSelection, 500); // show selection in 500 ms
 }
 
 $(document).ready( // when page has loaded
     function () {
-        $('#Pocky').click( // Pocky on click
+        $(document).on('click', '#Pocky', // Pocky on click
             function() {
                 if (!selected) { // first time selection
                     HideSelection(true); // player first
@@ -106,7 +178,7 @@ $(document).ready( // when page has loaded
             }
         );
 
-        $('#Donut').click( // Donut on click
+        $(document).on('click', '#Donut', // Donut on click
             function() {
                 if (!selected) { // first time selection
                     HideSelection(false); // AI first
@@ -114,7 +186,7 @@ $(document).ready( // when page has loaded
             }
         );
         
-        $(document).on('click', 'a.grid-link', // bind grid click event
+        $(document).on('click', 'a.grid-link', // bind click event to grid (for dynamically added elements)
             function (event) { 
                 if (!lock) { // prevent click more than once
                     lock = true; // lock grid
@@ -122,7 +194,7 @@ $(document).ready( // when page has loaded
                     var img_id = $(event.target).attr('id'); // get id of sender
                     var img_number = img_id.charAt(4); // get id number only
 
-                    var grid_id = "#grid-" + img_number; // grid id to be updated
+                    var grid_id = "#grid-div-" + img_number; // grid id to be updated
                     $(grid_id).html(''); // remove image from link
 
                     var html_string = "<img class=\"pocnut\" src=\"/images/"; // html string of img tag
@@ -141,10 +213,13 @@ $(document).ready( // when page has loaded
                     if (parseInt(img_number) != 9) new_grid += grid.substr(parseInt(img_number));
                     grid = new_grid;  // update grid state
 
+                    $(grid_id).html(''); // remove link (not clickable anymore)
                     $(grid_id).append(html_string); // update grid picture
                     CheckGameOver(false); // check game state
                 }
             }
         );
+
+        $(document).on('click', 'button.restart', HideGrid); // bind click event to restart button (for dynamically added elements)
     }
 );
