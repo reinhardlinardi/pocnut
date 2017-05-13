@@ -15,14 +15,22 @@ function CheckGameOver(turn) // true = player's turn next, false = AI's turn nex
         success: function (game_state_value) {
             var val = parseInt(game_state_value);
 
-            if (val == 0) // game is not over
-            {
+            if (val == 0) { // game is not over
                 if (turn) lock = false; // release lock
                 else AIMove(); // request for AI's move to server
             }
-            else if (val == 1) { $('#pocky-message').text('Draw!'); }
-            else if (val == 2) { $('#pocky-message').text('AI wins!'); }
-            else { $('#pocky-message').text('Player wins!'); }
+            else if (val == 1) { // game draws
+                if (first) $('#pocky-message').text('Draw!');
+                else $('#donut-message').text('Draw!');
+            }
+            else if (val == 2) { // AI wins
+                if (first) $('#donut-message').text('AI wins!');
+                else $('#pocky-message').text('AI wins!');
+            }
+            else { // player wins
+                if (first) $('#pocky-message').text('Player wins!');
+                else $('#donut-message').text('Player wins!');
+            }
         }
     });
 }
@@ -85,7 +93,7 @@ function HideSelection(_first) {
         $('#game').html(''); // remove selection
     });
 
-    timer = setTimeout(function () { ShowGrid(_first) }, 1000); // show grid in 1s
+    timer = setTimeout(function () { ShowGrid(_first); }, 500); // show grid in 500 ms
 }
 
 $(document).ready( // when page has loaded
