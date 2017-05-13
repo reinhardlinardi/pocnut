@@ -5,6 +5,28 @@ var first; // true = player first, false = AI first
 var lock = true; // true = grid locked, cannot be clicked
 var grid = "EEEEEEEEE"; // X = X, O = O, E = empty
 
+function CheckGameOver(turn) // true = player's turn next, false = AI's turn next
+{
+    $.ajax({ // request for game state
+        url: '/Home/CheckGameOver',
+        type: 'POST',
+        data: { first : first, grid : grid },
+        dataType: 'text',
+        success: function (game_state_value) {
+            var val = parseInt(game_state_value);
+
+            if (val == 0) // game is not over
+            {
+                if (turn) lock = false; // release lock
+                else AIMove(); // request for AI's move to server
+            }
+            else if (val == 1) { $('#pocky-message').text('Draw!'); }
+            else if (val == 2) { $('#pocky-message').text('AI wins!'); }
+            else { $('#pocky-message').text('Player wins!'); }
+        }
+    });
+}
+
 function AIMove()
 {
     $.ajax({ // request for AI's move
@@ -33,7 +55,7 @@ function AIMove()
             grid = new_grid; // update grid state
 
             $(grid_id).append(html_string); // update grid picture
-            lock = false; // release lock
+            CheckGameOver(true); // check game state
         }
     });
 }
@@ -68,8 +90,6 @@ function HideSelection(_first) {
 
 $(document).ready( // when page has loaded
     function () {
-        console.log(grid);
-
         $('#Pocky').click( // Pocky on click
             function() {
                 if (!selected) { // first time selection
@@ -112,9 +132,9 @@ $(document).ready( // when page has loaded
                     html_string += "\">";
                     if (parseInt(img_number) != 9) new_grid += grid.substr(parseInt(img_number));
                     grid = new_grid;  // update grid state
-                    console.log(grid);
 
                     $(grid_id).append(html_string); // update grid picture
+                    CheckGameOver(false); // check game state
                 }
             }
         );

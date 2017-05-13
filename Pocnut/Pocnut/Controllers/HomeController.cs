@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Pocnut;
 
 namespace TicTacToe.Controllers
 {
@@ -64,7 +65,14 @@ namespace TicTacToe.Controllers
 
         public IActionResult SendMove(string first, string grid) // first = player first or AI first, grid = grid state
         {
-            return Content(first + " " + grid);
+            AI ai = new AI(first, grid);
+            return Content(Convert.ToString(ai.GetNextMove())); // return AI's move as string
+        }
+
+        public IActionResult CheckGameOver(string first, string grid) // grid = grid state
+        {
+            AI ai = new AI(first, grid);
+            return Content(Convert.ToString(ai.IsGameOver())); // return game state
         }
     }
 }
