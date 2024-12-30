@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+# Usage: ./clean
+
+# --- 
+
+src_path = `find src/module -type f`
+gen_path = `find public/module -type f`
+
+src = {}
+gen = {}
+delete = []
+
+src_path.each_line { |line| src[File.basename(line.strip!, ".ts")] = nil }
+gen_path.each_line { |line| gen[File.basename(line.strip!, ".js")] = nil }
+
+gen.each_key { |file| delete.push(file) if !src.has_key?(file) }
+
+if delete.length > 0
+    files = delete.map { |file| "public/module/#{file}.js" }.join(" ")
+    cmd = "rm #{files}"
+    puts cmd; `#{cmd}`
+end

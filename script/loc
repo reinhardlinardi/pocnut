@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+# Usage: ./loc
+
+# ---
+
+ts_loc = `find src/module -type f | xargs wc -l | head -n -1`
+js_loc = `find public/script -type f | xargs wc -l | head -n -1`
+
+ext = ["ts", "js"]
+count = [0, 0]
+loc = [0, 0]
+
+ts_loc.each_line { |line| loc[0] += line.split(" ")[0].to_i; count[0] += 1 }
+js_loc.each_line { |line| loc[1] += line.split(" ")[0].to_i; count[1] += 1 }
+
+header = ["src", "#files", "LOC"]
+footer = "total"
+total = [count.reduce(:+), loc.reduce(:+)]
+
+len = [[header[0].length, footer.length, 2].max, [header[1].length, total[0].to_s.length].max, [header[2].length, total[1].to_s.length].max]
+
+header.each_index { |i|
+    spaces = i == 0 ? 0 : 2
+    print " " * (spaces+len[i]-header[i].length), header[i]
+}
+
+puts
+
+ext.each_index { |i|
+    print " " * (len[0]-ext[i].length), ext[i]
+    print " " * (2+len[1]-count[i].to_s.length), count[i]
+    print " " * (2+len[2]-loc[i].to_s.length), loc[i], "\n"
+}
+
+print "-" * (len.reduce(:+) + 2*(len.length-1)), " +\n"
+print " " * (len[0]-footer.length), footer, " " * (2+len[1]-total[0].to_s.length), total[0], " " * (2+len[2]-total[1].to_s.length), total[1], "\n"

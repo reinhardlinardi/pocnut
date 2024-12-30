@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Usage: ./run <name> [args]...
+
+name=$1
+shift
+script/${name} $@

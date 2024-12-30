@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Usage: ./watch css|js
+
+case $1 in
+    'css')
+        yarn run sass --watch --no-source-map src/style:public/style ;;
+    'js')
+        yarn run tsc --watch ;;
+esac
