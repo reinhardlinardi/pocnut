@@ -5,3 +5,7 @@
 .x-text {
   font-family: "Geometria Light", sans-serif;
 }
+
+.x-top-container {
+  padding: 10px 0 0 0;
+}
