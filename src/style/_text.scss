@@ -1,0 +1,10 @@
+@use 'font';
+
+
+%x-text {
+    font-family: 'Geometria Light', sans-serif;
+}
+
+.x-text {
+    @extend %x-text;
+}

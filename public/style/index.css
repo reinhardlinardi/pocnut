@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "Geometria Light";
+  src: url("../font/geometria-light.otf");
+}
+.x-text {
+  font-family: "Geometria Light", sans-serif;
+}
