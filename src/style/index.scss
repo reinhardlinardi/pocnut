@@ -1,16 +1,8 @@
 @use 'text';
 
 
-%invisible {
-    visibility: hidden;
-}
-
 [v-cloak] {
-    @extend %invisible;
-}
-
-.invisible {
-    @extend %invisible;
+    visibility: hidden;
 }
 
 .x-top-container {
