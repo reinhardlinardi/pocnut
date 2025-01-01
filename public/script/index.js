@@ -17,7 +17,7 @@ export function getMarkerText(marker) {
     return markerText[marker];
 }
 
-/* Selection */
+/* Event listener */
 export function onClickMarker(ev) {
     const player = Common.getMarker(ev.target.id);
     this.ai = {marker: opponentOf(player), move: player === O};
@@ -32,6 +32,12 @@ export function onClickMarker(ev) {
         
         this.grid.push(row);
     }
-    console.log(this.ai);
-    console.log(this.result);
+}
+
+export function onClickResign(ev) {
+    this.result.ended = true;
+}
+
+export function onClickReset(ev) {
+    this.play = false;
 }

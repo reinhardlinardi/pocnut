@@ -25,9 +25,16 @@
           <template v-if="!play">
             <p class="x-text">You can't win, but can you not lose?</p>
           </template>
+
           <template v-else>
             <p class="x-text" v-if="!result.ended">
-              Your move, or do you admit <a class="link-primary pointer">defeat</a>?
+              {{ai.move? "I'm thinking..." : "Move, or admit "}}
+              <a class="link-primary pointer" @click="onClickResign" v-if="!ai.move">defeat</a>?
+            </p>
+
+            <p class="x-text" v-else>
+              Do you want to 
+              <a class="link-primary pointer" @click="onClickReset">{{(result.draw? "play":"try") + " again"}}</a>?
             </p>
           </template>
         </div>
