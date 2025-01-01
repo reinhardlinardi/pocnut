@@ -7,7 +7,10 @@ const component = {
         return {
             play: false,
             ended: false,
-            ai: '',
+            ai: {
+                move: false,
+                marker: '',
+            },
             grid: [],
         }
     },

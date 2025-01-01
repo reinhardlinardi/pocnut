@@ -19,8 +19,9 @@ export function getMarkerText(marker) {
 
 /* Selection */
 export function onClickMarker(ev) {
-    const marker = Common.getMarker(ev.target.id);
-    this.ai = opponentOf(marker);
+    const player = Common.getMarker(ev.target.id);
+    this.ai.marker = opponentOf(player);
+    this.ai.move = player === X? false : true;
 
     this.play = true;
     this.ended = false;
@@ -32,5 +33,6 @@ export function onClickMarker(ev) {
         
         this.grid.push(row);
     }
+    console.log(this.ai);
     console.log(this.grid);
 }
