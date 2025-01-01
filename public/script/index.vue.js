@@ -6,12 +6,15 @@ const component = {
     data() {
         return {
             play: false,
-            ended: false,
+            grid: [],
+            result: {
+                ended: false,
+                draw: false,
+            },
             ai: {
                 move: false,
                 marker: '',
             },
-            grid: [],
         }
     },
     methods: {

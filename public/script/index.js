@@ -20,11 +20,10 @@ export function getMarkerText(marker) {
 /* Selection */
 export function onClickMarker(ev) {
     const player = Common.getMarker(ev.target.id);
-    this.ai.marker = opponentOf(player);
-    this.ai.move = player === X? false : true;
+    this.ai = {marker: opponentOf(player), move: player === O};
 
     this.play = true;
-    this.ended = false;
+    this.result = {ended: false, draw: false};
     this.grid = [];
 
     for(let r=0; r<size; r++) {
@@ -34,5 +33,5 @@ export function onClickMarker(ev) {
         this.grid.push(row);
     }
     console.log(this.ai);
-    console.log(this.grid);
+    console.log(this.result);
 }
