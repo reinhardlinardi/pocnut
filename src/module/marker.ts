@@ -1,5 +1,6 @@
 export type Marker = string;
 
+export const None: Marker = '';
 export const X: Marker = 'X';
 export const O: Marker = 'O';
 

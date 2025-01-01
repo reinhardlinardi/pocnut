@@ -22,8 +22,14 @@
 
         <h2 class="d-flex justify-content-center x-top-container x-text">Pocnut</h2>
         <div class="d-flex justify-content-center x-middle-container">
-          <p class="x-text" v-if="!play">You can't win, but can you not lose?</p>
-          <!-- <p v-else>...</p> -->
+          <template v-if="!play">
+            <p class="x-text">You can't win, but can you not lose?</p>
+          </template>
+          <template v-else>
+            <p class="x-text" v-if="!ended">
+              Your move, or do you admit <a class="link-primary pointer">defeat</a>?
+            </p>
+          </template>
         </div>
         
         <div class="d-flex justify-content-center">
@@ -49,6 +55,10 @@
                 </div>
               </template>
             </div>
+          </div>
+
+          <div class="container-fluid text-center x-img-container" v-else>
+
           </div>
           
         </div>

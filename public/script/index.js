@@ -1,5 +1,6 @@
 import * as Common from './common.js';
-import { X, O, opponentOf, getList as getMarkers } from '../module/marker.js';
+import { Size as size } from '../module/size.js';
+import { X, O, None, opponentOf, getList as getMarkers } from '../module/marker.js';
 
 
 /* Marker */
@@ -20,7 +21,16 @@ export function getMarkerText(marker) {
 export function onClickMarker(ev) {
     const marker = Common.getMarker(ev.target.id);
     this.ai = opponentOf(marker);
-    console.log(this.ai);
-    
-    //this.play = true;
+
+    this.play = true;
+    this.ended = false;
+    this.grid = [];
+
+    for(let r=0; r<size; r++) {
+        let row = [];
+        for(let c=0; c<size; c++) row.push(None);
+        
+        this.grid.push(row);
+    }
+    console.log(this.grid);
 }

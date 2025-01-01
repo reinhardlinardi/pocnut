@@ -6,7 +6,9 @@ const component = {
     data() {
         return {
             play: false,
+            ended: false,
             ai: '',
+            grid: [],
         }
     },
     methods: {
