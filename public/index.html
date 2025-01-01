@@ -66,16 +66,16 @@
           </div>
 
           <div class="container-fluid text-center x-grid-container" v-else>
-            <template v-for="(row, y) in grid">
+            <template v-for="(row, r) in grid">
               <div class="row">
 
-                <template v-for="(marker, x) in row">
-                  <div class="col">
+                <template v-for="(marker, c) in row">
+                  <div :class="['col', 'x-grid-cell', 'border',
+                    r==0? 'border-top-0': r==grid.length-1? 'border-bottom-0':'',
+                    c==0? 'border-start-0': c==grid.length-1? 'border-end-0':'']">
                     <img class= "img-fluid pointer"
                       :src="`png/O.png`"
                       :id="`grid-y${y}-x${x}`"
-                      :data-row="y"
-                      :data-col="x"
                     >
                   </div>
                 </template>
