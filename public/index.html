@@ -30,25 +30,23 @@
 
           <div class="container-fluid text-center x-img-container" v-if="!play">
             <div class="row">
-              <div class="col">
-                <img src="png/pocky.png"
-                  class= "img-fluid pointer"
-                >
-              </div>
-              <div class="col">
-                <img src="png/donut.png"
-                  class= "img-fluid pointer"
-                >
-              </div>
+              <template v-for="marker in markers()">
+                <div class="col">
+                  <img class= "img-fluid pointer"
+                    :src="`png/${marker}.png`"
+                    :id="`select-${marker}`"
+                    :data-marker="marker"
+                  >
+                </div>
+              </template>
             </div>
 
             <div class="row">
-              <div class="col">
-                <p class="x-text">Move first</p>
-              </div>
-              <div class="col">
-                <p class="x-text">Bring it on!</p>
-              </div>
+              <template v-for="marker in markers()">
+                <div class="col">
+                  <p class="x-text">{{getMarkerText(marker)}}</p>
+                </div>
+              </template>
             </div>
           </div>
           
