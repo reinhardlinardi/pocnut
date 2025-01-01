@@ -21,6 +21,8 @@ const component = {
         markers: page.markers,
         getMarkerText: page.getMarkerText,
 
+        unmarked: page.unmarked,
+
         onClickMarker: page.onClickMarker,
         onClickResign: page.onClickResign,
         onClickReset: page.onClickReset,

@@ -72,10 +72,13 @@
                 <template v-for="(marker, c) in row">
                   <div :class="['col', 'x-grid-cell', 'border',
                     r==0? 'border-top-0': r==grid.length-1? 'border-bottom-0':'',
-                    c==0? 'border-start-0': c==grid.length-1? 'border-end-0':'']">
-                    <img class= "img-fluid pointer"
-                      :src="`png/O.png`"
-                      :id="`grid-y${y}-x${x}`"
+                    c==0? 'border-start-0': c==grid.length-1? 'border-end-0':'']"
+                  >
+                    <img :class= "['img-fluid', unmarked(marker)? 'pointer':'']"
+                      :src="`png/${marker}.png`"
+                      :id="`grid-r${r}-c${c}`"
+                      :data-row="r"
+                      :data-col="c"
                     >
                   </div>
                 </template>
