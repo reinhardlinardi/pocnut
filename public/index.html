@@ -29,7 +29,9 @@
           <template v-else>
             <p class="x-text" v-if="!result.ended">
               {{ai.move? "I'm thinking..." : "Move, or maybe admit "}}
-              <a class="link-primary pointer" @click="onClickResign" v-if="!ai.move">defeat</a>?
+              <template v-if="!ai.move">
+                <a class="link-primary pointer" @click="onClickResign">defeat</a>?
+              </template>
             </p>
 
             <p class="x-text" v-else>
@@ -70,7 +72,7 @@
                 <template v-for="(marker, x) in row">
                   <div class="col">
                     <img class= "img-fluid pointer"
-                      :src="`png/X.png`"
+                      :src="`png/O.png`"
                       :id="`grid-y${y}-x${x}`"
                       :data-row="y"
                       :data-col="x"
