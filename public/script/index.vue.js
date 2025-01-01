@@ -6,12 +6,14 @@ const component = {
     data() {
         return {
             play: false,
-            first: true,
+            ai: '',
         }
     },
     methods: {
         markers: page.markers,
         getMarkerText: page.getMarkerText,
+
+        onClickMarker: page.onClickMarker,
     },
 };
 
