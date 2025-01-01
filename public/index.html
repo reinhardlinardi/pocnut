@@ -19,8 +19,8 @@
 
     <div id="app" v-cloak>
       <div class="container">
-
         <h2 class="d-flex justify-content-center x-top-container x-text">Pocnut</h2>
+
         <div class="d-flex justify-content-center x-middle-container">
           <template v-if="!play">
             <p class="x-text">You can't win, but can you not lose?</p>
@@ -28,7 +28,7 @@
 
           <template v-else>
             <p class="x-text" v-if="!result.ended">
-              {{ai.move? "I'm thinking..." : "Move, or admit "}}
+              {{ai.move? "I'm thinking..." : "Move, or maybe admit "}}
               <a class="link-primary pointer" @click="onClickResign" v-if="!ai.move">defeat</a>?
             </p>
 
@@ -40,8 +40,7 @@
         </div>
         
         <div class="d-flex justify-content-center">
-
-          <div class="container-fluid text-center x-img-container" v-if="!play">
+          <div class="container-fluid text-center x-marker-container" v-if="!play">
             <div class="row">
               <template v-for="marker in markers()">
                 <div class="col">
@@ -64,10 +63,24 @@
             </div>
           </div>
 
-          <div class="container-fluid text-center x-img-container" v-else>
+          <div class="container-fluid text-center x-grid-container" v-else>
+            <template v-for="(row, y) in grid">
+              <div class="row">
 
+                <template v-for="(marker, x) in row">
+                  <div class="col">
+                    <img class= "img-fluid pointer"
+                      :src="`png/X.png`"
+                      :id="`grid-y${y}-x${x}`"
+                      :data-row="y"
+                      :data-col="x"
+                    >
+                  </div>
+                </template>
+
+              </div>
+            </template>
           </div>
-          
         </div>
       
       </div>
