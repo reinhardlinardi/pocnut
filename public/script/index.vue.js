@@ -6,9 +6,11 @@ const component = {
     data() {
         return {
             play: false,
-            wait: false,
             state: {},
         }
+    },
+    computed: {
+        wait: page.wait,
     },
     methods: {
         markers: page.markers,

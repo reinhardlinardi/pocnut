@@ -2,7 +2,10 @@ import * as Common from './common.js';
 import { Game } from '../module/game.js';
 import { X, O, None, getList as getMarkers } from '../module/marker.js';
 
+
 const game = new Game();
+var selected;
+
 
 /* Marker */
 const markerText = Object.freeze({[X]: 'Move first', [O]: 'Bring it on!'});
@@ -27,30 +30,26 @@ export function empty(marker) {
 
 
 /* Game */
+export function wait() {
+    return this.state.move === selected;
+}
+
 export function ended() {
-    const result = this.state.result;
-    console.log(result.ended);
-    return result.ended;
+    return this.state.result.ended;
 }
 
 export function draw() {
-    const result = this.state.result;
-    return result.winner === None;
+    return this.state.result.winner === None;
 }
 
 
 /* Event listener */
 export function onClickMarker(ev) {
-    const move = this.state.move;
-    const player = Common.getMarker(ev.target.id);
-
-    this.wait = move === player;
+    selected = Common.getMarker(ev.target.id);
     this.play = true;
-
-    // if wait false, AI's move
-
+    
     this.state = game.getState();
-    console.log(this.state);
+    console.log((this.wait? "Player":"AI") + "'s turn");
 }
 
 export function onClickResign(ev) {
