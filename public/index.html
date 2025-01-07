@@ -27,16 +27,16 @@
           </template>
 
           <template v-else>
-            <p class="x-text" v-if="!result.ended">
-              {{ai.move? "I'm thinking..." : "Move, or maybe admit "}}
-              <template v-if="!ai.move">
-                <a class="link-primary pointer" @click="onClickResign">defeat</a>?
-              </template>
+            <p class="x-text" v-if="ended()">
+              Do you want to 
+              <a class="link-primary pointer" @click="onClickReset">{{(draw? "play":"try") + " again"}}</a>?
             </p>
 
             <p class="x-text" v-else>
-              Do you want to 
-              <a class="link-primary pointer" @click="onClickReset">{{(result.draw? "play":"try") + " again"}}</a>?
+              {{wait? "Move or admit " : "I'm thinking..."}}
+              <template v-if="wait">
+                <a class="link-primary pointer" @click="onClickResign">defeat</a>.
+              </template>
             </p>
           </template>
         </div>
@@ -66,7 +66,7 @@
           </div>
 
           <div class="container-fluid text-center x-grid-container" v-else>
-            <template v-for="(row, r) in grid">
+            <template v-for="(row, r) in board">
               <div class="row">
 
                 <template v-for="(marker, c) in row">
@@ -74,7 +74,7 @@
                     r==0? 'border-top-0': r==grid.length-1? 'border-bottom-0':'',
                     c==0? 'border-start-0': c==grid.length-1? 'border-end-0':'']"
                   >
-                    <img :class= "['img-fluid', unmarked(marker)? 'pointer':'']"
+                    <img :class= "['img-fluid', empty(marker)? 'pointer':'']"
                       :src="`png/${marker}.png`"
                       :id="`grid-r${r}-c${c}`"
                       :data-row="r"

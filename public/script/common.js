@@ -8,6 +8,7 @@ export function getElementData(id) {
     return getElement(id).dataset;
 }
 
+
 /* Data */
 export function getMarker(id) {
     const data = getElementData(id);

@@ -6,22 +6,19 @@ const component = {
     data() {
         return {
             play: false,
-            grid: [],
-            result: {
-                ended: false,
-                draw: false,
-            },
-            ai: {
-                move: false,
-                marker: '',
-            },
+            wait: false,
+            state: {},
         }
     },
     methods: {
         markers: page.markers,
         getMarkerText: page.getMarkerText,
 
-        unmarked: page.unmarked,
+        board: page.board,
+        empty: page.empty,
+
+        ended: page.ended,
+        draw: page.draw,
 
         onClickMarker: page.onClickMarker,
         onClickResign: page.onClickResign,

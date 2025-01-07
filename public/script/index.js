@@ -1,13 +1,11 @@
 import * as Common from './common.js';
-import { Size as size } from '../module/size.js';
-import { X, O, None, opponentOf, getList as getMarkers } from '../module/marker.js';
+import { Game } from '../module/game.js';
+import { X, O, None, getList as getMarkers } from '../module/marker.js';
 
+const game = new Game();
 
 /* Marker */
-const markerText = Object.freeze({
-    [X]: 'Move first',
-    [O]: 'Bring it on!',
-});
+const markerText = Object.freeze({[X]: 'Move first', [O]: 'Bring it on!'});
 
 export function markers() {
     return getMarkers();
@@ -17,29 +15,46 @@ export function getMarkerText(marker) {
     return markerText[marker];
 }
 
-/* Grid */
-export function unmarked(marker) {
+
+/* Board */
+export function board() {
+    return game.getState().board;
+}
+
+export function empty(marker) {
     return marker === None;
 }
 
+
+/* Game */
+export function ended() {
+    const result = this.state.result;
+    console.log(result.ended);
+    return result.ended;
+}
+
+export function draw() {
+    const result = this.state.result;
+    return result.winner === None;
+}
+
+
 /* Event listener */
 export function onClickMarker(ev) {
+    const move = this.state.move;
     const player = Common.getMarker(ev.target.id);
-    this.ai = {marker: opponentOf(player), move: player === O};
 
+    this.wait = move === player;
     this.play = true;
-    this.result = {ended: false, draw: false};
-    this.grid = [];
 
-    for(let r=0; r<size; r++) {
-        let row = [];
-        for(let c=0; c<size; c++) row.push(None);        
-        this.grid.push(row);
-    }
+    // if wait false, AI's move
+
+    this.state = game.getState();
+    console.log(this.state);
 }
 
 export function onClickResign(ev) {
-    this.result.ended = true;
+    game.reset();
 }
 
 export function onClickReset(ev) {
