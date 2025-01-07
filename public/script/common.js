@@ -14,3 +14,13 @@ export function getMarker(id) {
     const data = getElementData(id);
     return data.marker;
 }
+
+export function getRow(id) {
+    const data = getElementData(id);
+    return data.row;
+}
+
+export function getCol(id) {
+    const data = getElementData(id);
+    return data.col;
+}

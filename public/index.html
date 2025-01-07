@@ -27,56 +27,68 @@
           </template>
 
           <template v-else>
-            <p class="x-text" v-if="ended()">
-              Do you want to 
-              <a class="link-primary pointer" @click="onClickReset">{{(draw? "play":"try") + " again"}}</a>?
-            </p>
+            <p class="x-text">
+              <template v-if="isOver()">
+                {{ isDraw()? "Not bad. " : "Your skills are no match. " }}
+                <a class="link-primary pointer" @click="onClickReset">{{ isDraw()? "Play again": "Try again" }}</a>?
+              </template>
 
-            <p class="x-text" v-else>
-              {{wait? "Move or admit " : "I'm thinking..."}}
-              <template v-if="wait">
-                <a class="link-primary pointer" @click="onClickResign">defeat</a>.
+              <template v-else>
+                <template v-if="wait">
+                  Your turn to move or admit <a class="link-primary pointer" @click="onClickResign">defeat</a>.
+                </template>
+                <template v-else>
+                  Processing...
+                </template>
               </template>
             </p>
           </template>
         </div>
         
         <div class="d-flex justify-content-center">
-          <div class="container-fluid text-center x-marker-container" v-if="!play">
+          <div class="container-fluid text-center x-select-container" v-if="!play">
             <div class="row">
-              <template v-for="marker in markers()">
-                <div class="col">
-                  <img class= "img-fluid pointer"
-                    :src="`png/${marker}.png`"
-                    :id="`select-${marker}`"
-                    @click="onClickMarker"
-                    :data-marker="marker"
-                  >
-                </div>
-              </template>
+              <div class="col">
+                <img class= "img-fluid pointer"
+                  :src="`png/${x()}.png`"
+                  :id="`select-${x()}`"
+                  @click="onClickSelect"
+                  :data-marker="x()"
+                >
+              </div>
+              <div class="col">
+                <img class= "img-fluid pointer"
+                  :src="`png/${o()}.png`"
+                  :id="`select-${o()}`"
+                  @click="onClickSelect"
+                  :data-marker="o()"
+                >
+              </div>
             </div>
 
             <div class="row">
-              <template v-for="marker in markers()">
-                <div class="col">
-                  <p class="x-text">{{getMarkerText(marker)}}</p>
-                </div>
-              </template>
+              <div class="col">
+                <p class="x-text">First move</p>
+              </div>
+              <div class="col">
+                <p class="x-text">Bring it on!</p>
+              </div>
             </div>
           </div>
 
           <div class="container-fluid text-center x-grid-container" v-else>
-            <template v-for="(row, r) in board">
+            <template v-for="(row, r) in board()">
               <div class="row">
 
                 <template v-for="(marker, c) in row">
                   <div :class="['col', 'x-grid-cell', 'border',
-                    r==0? 'border-top-0': r==grid.length-1? 'border-bottom-0':'',
-                    c==0? 'border-start-0': c==grid.length-1? 'border-end-0':'']"
+                    isTop(r)? 'border-top-0': isBottom(r)? 'border-bottom-0': '',
+                    isLeft(c)? 'border-start-0': isRight(c)? 'border-end-0': '']"
                   >
-                    <img :class= "['img-fluid', empty(marker)? 'pointer':'']"
+                    <img :class= "['img-fluid', isEmpty(r, c)? 'pointer': '']"
                       :src="`png/${marker}.png`"
                       :id="`grid-r${r}-c${c}`"
+                      @click="onClickMark"
                       :data-row="r"
                       :data-col="c"
                     >

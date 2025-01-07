@@ -13,16 +13,21 @@ const component = {
         wait: page.wait,
     },
     methods: {
-        markers: page.markers,
-        getMarkerText: page.getMarkerText,
+        x: page.x,
+        o: page.o,
 
+        isOver: page.isOver,
+        isDraw: page.isDraw,
+        
         board: page.board,
-        empty: page.empty,
+        isTop: page.isTop,
+        isBottom: page.isBottom,
+        isLeft: page.isLeft,
+        isRight: page.isRight,
+        isEmpty: page.isEmpty,
 
-        ended: page.ended,
-        draw: page.draw,
-
-        onClickMarker: page.onClickMarker,
+        onClickSelect: page.onClickSelect,
+        onClickMark: page.onClickMark,
         onClickResign: page.onClickResign,
         onClickReset: page.onClickReset,
     },
