@@ -37,24 +37,35 @@ export function board() {
     return this.state.board;
 }
 
-export function isTop(r) {
-    return r === 0;
+export function isTop(row) {
+    return row === 0;
 }
 
-export function isBottom(r) {
-    return r === size-1;
+export function isBottom(row) {
+    return row === size-1;
 }
 
-export function isLeft(c) {
-    return c === 0;
+export function isLeft(col) {
+    return col === 0;
 }
 
-export function isRight(c) {
-    return c === size-1;
+export function isRight(col) {
+    return col === size-1;
 }
 
-export function isEmpty(r, c) {
-    return this.state.board[r][c] === None;
+export function isEmpty(row, col) {
+    return this.state.board[row][col] === None;
+}
+
+
+/* Move */
+export function move(row, col) {
+    if(!this.wait) return;
+
+    game.move(row, col);
+    this.state = game.getState();
+
+    console.log(this.state);
 }
 
 
@@ -68,10 +79,9 @@ export function onClickSelect(ev) {
 }
 
 export function onClickMark(ev) {
-    const r = Common.getRow(ev.target.id);
-    const c = Common.getCol(ev.target.id);
-
-    console.log(r, c);
+    const row = Common.getRow(ev.target.id);
+    const col = Common.getCol(ev.target.id);
+    this.move(row, col);
 }
 
 export function onClickResign(ev) {

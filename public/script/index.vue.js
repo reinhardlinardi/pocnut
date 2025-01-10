@@ -26,6 +26,8 @@ const component = {
         isRight: page.isRight,
         isEmpty: page.isEmpty,
 
+        move: page.move,
+
         onClickSelect: page.onClickSelect,
         onClickMark: page.onClickMark,
         onClickResign: page.onClickResign,

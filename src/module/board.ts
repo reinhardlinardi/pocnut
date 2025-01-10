@@ -6,11 +6,9 @@ export type Board = string[][];
 export function New(): Board {
     let board: Board = [];
 
-    for(let i=0; i<size; i++) {
-        let row: string[] = [];
-
-        for(let j=0; j<size; j++) row.push(None);
-        board.push(row);
+    for(let row=0; row<size; row++) {
+        board.push([]);
+        for(let col=0; col<size; col++) board[row].push(None);
     }
 
     return board;
