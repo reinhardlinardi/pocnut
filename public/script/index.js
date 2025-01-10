@@ -71,7 +71,7 @@ export async function playerMove(row, col) {
 }
 
 export async function AIMove() {
-    await sleep(500);
+    await sleep(400);
 
     const square = AI.move(this.state.board);
     game.move(square.row, square.col);
