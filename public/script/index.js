@@ -1,7 +1,8 @@
-import * as Common from './common.js';
+import * as AI from '../module/ai.js';
 import { Game } from '../module/game.js';
 import { X, O, None } from '../module/marker.js';
 import { Size as size } from '../module/size.js';
+import { getMarker, getRow, getCol } from './common.js';
 
 
 const game = new Game();
@@ -59,29 +60,44 @@ export function isEmpty(row, col) {
 
 
 /* Move */
-export function move(row, col) {
+export async function playerMove(row, col) {
+    if(this.isOver()) return;
     if(!this.wait) return;
 
     game.move(row, col);
     this.state = game.getState();
 
-    console.log(this.state);
+    if(!this.isOver()) await this.AIMove();
+}
+
+export async function AIMove() {
+    await sleep(500);
+
+    const square = AI.move(this.state.board);
+    game.move(square.row, square.col);
+    this.state = game.getState();
+}
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 
 /* Event listener */
 export function onClickSelect(ev) {
-    selected = Common.getMarker(ev.target.id);
+    selected = getMarker(ev.target.id);
     this.play = true;
     
     game.reset();
     this.state = game.getState();
+
+    if(!this.wait) this.AIMove();
 }
 
 export function onClickMark(ev) {
-    const row = Common.getRow(ev.target.id);
-    const col = Common.getCol(ev.target.id);
-    this.move(row, col);
+    const row = getRow(ev.target.id);
+    const col = getCol(ev.target.id);
+    this.playerMove(row, col);
 }
 
 export function onClickResign(ev) {

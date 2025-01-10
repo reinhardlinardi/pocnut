@@ -26,7 +26,8 @@ const component = {
         isRight: page.isRight,
         isEmpty: page.isEmpty,
 
-        move: page.move,
+        playerMove: page.playerMove,
+        AIMove: page.AIMove,
 
         onClickSelect: page.onClickSelect,
         onClickMark: page.onClickMark,
