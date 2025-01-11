@@ -14,9 +14,12 @@ export interface Move extends Square {
 };
 
 
-export function minimax(game: Game, turn: boolean): Move {
-    const state = game.getState();
-    const c = candidates(state.board);
+export function move(game: Game): Move {
+    return minimax(game.clone(), true, 0);
+}
+
+function minimax(game: Game, turn: boolean, depth: number): Move {
+    const c = candidates(game.getState().board);
 
     const idx = Math.floor(Math.random()*c.length);
     return {...c[idx], score: 0};
@@ -30,6 +33,5 @@ function candidates(board: Board): Square[] {
             if(board[row][col] === None) c.push({row: row, col: col});
         }
     }
-
     return c;
 }

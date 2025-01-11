@@ -74,7 +74,7 @@ export async function playerMove(row, col) {
 export async function AIMove() {
     await sleep(400);
 
-    const move = AI.minimax(game, true);
+    const move = AI.move(game);
     game.move(move.row, move.col);
     this.state = game.getState();
 }
