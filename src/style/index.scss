@@ -16,10 +16,12 @@
 
 .x-select-container {
     max-width: 300px;
+    user-select: none;
 }
 
 .x-grid-container {
     max-width: 420px;
+    user-select: none;
 }
 
 .x-grid-cell {
