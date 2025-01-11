@@ -27,6 +27,8 @@ export class Engine {
     move(prev: null | Move): Move {
         if(prev !== null) this.game.move(prev);
 
+        // check game result and remaining moves
+
         const c = this.getMoves();
         const idx = Math.floor(Math.random()*c.length);
 

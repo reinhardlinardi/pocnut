@@ -20,8 +20,8 @@ export class Game {
 
     clone(): Game {
         const copy = new Game();
-
         copy.state = this.getState();
+
         return copy;
     }
 
@@ -37,23 +37,26 @@ export class Game {
 
     move(move: Move) {
         const state = this.state;
+        const board = state.board;
+
         const row = move.row;
         const col = move.col;
 
-        if(state.board[row][col] !== None) return;
+        if(board[row][col] !== None) return;
 
-        state.board[row][col] = state.move;
-        if(this.isOver()) state.result = Result.end(state.move);
+        board[row][col] = state.move;
+
+        if(this.lastMoveWins()) state.result = Result.end(state.move);
+        else if(this.noEmptySquare()) state.result = Result.end(None);
 
         state.move = opponentOf(state.move);
     }
 
-    private isOver(): boolean {
-        return this.rowMarked() || this.columnMarked() || 
-            this.leftDiagonalMarked() || this.rightDiagonalMarked();
+    private lastMoveWins(): boolean {
+        return this.markRow() || this.markColumn() || this.markDownDiagonal() || this.markUpDiagonal();
     }
 
-    private rowMarked(): boolean {
+    private markRow(): boolean {
         const board = this.state.board;
 
         for(let row=0; row<size; row++) {
@@ -68,7 +71,7 @@ export class Game {
         return false;
     }
 
-    private columnMarked(): boolean {
+    private markColumn(): boolean {
         const board = this.state.board;
 
         for(let col=0; col<size; col++) {
@@ -83,7 +86,7 @@ export class Game {
         return false;
     }
 
-    private leftDiagonalMarked(): boolean {
+    private markDownDiagonal(): boolean {
         const board = this.state.board;
         const marker = board[0][0];
         
@@ -95,7 +98,7 @@ export class Game {
         return true;
     }
 
-    private rightDiagonalMarked(): boolean {
+    private markUpDiagonal(): boolean {
         const board = this.state.board;
         const marker = board[0][size-1];
 
@@ -103,6 +106,17 @@ export class Game {
         
         for(let row=1; row<size; row++) {
             if(board[row][size-1-row] !== marker) return false;
+        }
+        return true;
+    }
+
+    private noEmptySquare(): boolean {
+        const board = this.state.board;
+
+        for(let row=0; row<size; row++) {
+            for(let col=0; col<size; col++) {
+                if(board[row][col] === None) return false;
+            }
         }
         return true;
     }
