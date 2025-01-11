@@ -77,9 +77,6 @@ export async function engineMove(prev) {
     await sleep(400);
     const move = engine.move(prev);
 
-    // TODO: remove
-    console.log(engine.board());
-    
     game.move(move);
     this.state = game.getState();
 }
@@ -90,7 +87,7 @@ function sleep(ms) {
 
 
 /* Event listener */
-export function onClickSelect(ev) {
+export async function onClickSelect(ev) {
     selected = getMarker(ev.target.id);
     engine = new Engine(opponentOf(selected));
     
@@ -98,15 +95,15 @@ export function onClickSelect(ev) {
     this.state = game.getState();
 
     this.play = true;
-    if(!this.wait) this.engineMove(null);
+    if(!this.wait) await this.engineMove(null);
 }
 
-export function onClickMark(ev) {
+export async function onClickMark(ev) {
     const row = getRow(ev.target.id);
     const col = getCol(ev.target.id);
 
     const move = {row: row, col: col};
-    this.playerMove(move);
+    await this.playerMove(move);
 }
 
 export function onClickResign(ev) {

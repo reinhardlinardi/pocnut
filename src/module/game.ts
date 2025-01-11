@@ -1,4 +1,5 @@
 import { Move } from './move.js';
+import { copy } from './board.js';
 import * as Result from './result.js';
 import { Size as size } from './size.js';
 import { None, opponentOf } from "./marker.js";
@@ -13,7 +14,8 @@ export class Game {
     }
 
     getState(): State {
-        return {...this.state};
+        const s = this.state;
+        return {board: copy(s.board), move: s.move, result: {...s.result}};
     }
 
     clone(): Game {

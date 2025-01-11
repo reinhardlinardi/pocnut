@@ -13,3 +13,10 @@ export function New(): Board {
 
     return board;
 }
+
+export function copy(board: Board): Board {
+    let copy: Board = New();
+
+    for(let row=0; row<size; row++) copy[row] = [...board[row]];
+    return copy;
+}

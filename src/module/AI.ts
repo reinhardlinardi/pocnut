@@ -39,8 +39,7 @@ export class Engine {
         return this.game.getState();
     }
 
-    // TODO: Make private
-    board(): Board {
+    private board(): Board {
         return this.state().board;
     }
 
