@@ -53,10 +53,10 @@ export class Game {
     }
 
     private lastMoveWins(): boolean {
-        return this.markRow() || this.markColumn() || this.markDownDiagonal() || this.markUpDiagonal();
+        return this.markedRow() || this.markedColumn() || this.markedDownDiagonal() || this.markedUpDiagonal();
     }
 
-    private markRow(): boolean {
+    private markedRow(): boolean {
         const board = this.state.board;
 
         for(let row=0; row<size; row++) {
@@ -71,7 +71,7 @@ export class Game {
         return false;
     }
 
-    private markColumn(): boolean {
+    private markedColumn(): boolean {
         const board = this.state.board;
 
         for(let col=0; col<size; col++) {
@@ -86,7 +86,7 @@ export class Game {
         return false;
     }
 
-    private markDownDiagonal(): boolean {
+    private markedDownDiagonal(): boolean {
         const board = this.state.board;
         const marker = board[0][0];
         
@@ -98,7 +98,7 @@ export class Game {
         return true;
     }
 
-    private markUpDiagonal(): boolean {
+    private markedUpDiagonal(): boolean {
         const board = this.state.board;
         const marker = board[0][size-1];
 

@@ -1,7 +1,5 @@
 import { Move } from "./move.js";
 import { Game } from "./game.js";
-import { Board } from "./board.js";
-import { State } from "./state.js";
 import { Marker, None } from "./marker.js";
 import { Size as size } from "./size.js";
 
@@ -27,59 +25,50 @@ export class Engine {
     move(prev: null | Move): Move {
         if(prev !== null) this.game.move(prev);
 
-        // check game result and remaining moves
+        const move = this.minimax(this.game.clone(), 0).move;
+        this.game.move(move);
 
-        const c = this.getMoves();
-        const idx = Math.floor(Math.random()*c.length);
-
-        this.game.move(c[idx]);
-        return c[idx];
-        // return minimax(game.clone(), 0, marker);
+        return move;
     }
 
-    private state(): State {
-        return this.game.getState();
-    }
+    private minimax(game: Game, depth: number): Eval {
+        const state = game.getState();
+        const board = state.board;
+        const result = state.result;
+        
+        // Win as soon as possible, draw or lose as long as possible
+        if(result.ended) {
+            const score = result.winner === this.marker? INF-depth : depth-INF;
+            return {move: {row: -1, col: -1}, score: score};
+        }
 
-    private board(): Board {
-        return this.state().board;
-    }
+        let moves: Move[] = []; 
 
-    private getMoves(): Move[] {
-        const board = this.board();
-        let m: Move[] = [];
-    
         for(let row=0; row<size; row++) {
             for(let col=0; col<size; col++) {
-                if(board[row][col] === None) m.push({row: row, col: col});
+                if(board[row][col] === None) moves.push({row: row, col: col});
             }
         }
-        return m;
+
+        let selected = -1;
+        let optimal = INF+1;
+
+        const opp = state.move !== this.marker;
+        if(!opp) optimal *= -1;
+
+        // Player's optimal move = minimize score, AI's optimal move = maximize score
+        moves.forEach((move, idx) => {
+            const g = game.clone();
+            g.move(move);
+
+            const ev = this.minimax(g, depth+1);
+            
+            if(!opp && ev.score > optimal || opp && ev.score < optimal) {
+                selected = idx;
+                optimal = ev.score;
+            }
+        });
+
+        return {move: moves[selected], score: optimal};
     }
-
-    // private minimax(game: Game, marker: Marker, depth: number): Move {
-    //     const state = game.getState();
-    //     const result = state.result;
-        
-    //     if(result.ended) {
-    //         // Win as soon as possible, draw or lose as long as possible
-    //         const score = result.winner === marker? INF-depth : depth-INF;
-    //         return {row: -1, col: -1, score: score};
-    //     }
-    
-    //     const board = state.board;
-    //     const c = candidates(board);
-    
-    //     let move: Move = {row: -1, col: -1, score: 2*-INF};
-        
-    //     // Player's optimal move = minimize score, AI's optimal move = maximize score
-    //     c.forEach((sq) => {
-    //         const g = game.clone();
-    //         g.move(sq.row, sq.col);
-    //     });
-    
-    //     return move;   
-    // }
 };
-
-
