@@ -1,3 +1,4 @@
+import { Move } from './move.js';
 import * as Result from './result.js';
 import { Size as size } from './size.js';
 import { None, opponentOf } from "./marker.js";
@@ -32,8 +33,11 @@ export class Game {
         state.result = Result.end(winner);
     }
 
-    move(row: number, col: number) {
+    move(move: Move) {
         const state = this.state;
+        const row = move.row;
+        const col = move.col;
+
         if(state.board[row][col] !== None) return;
 
         state.board[row][col] = state.move;

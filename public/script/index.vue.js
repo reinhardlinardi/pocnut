@@ -27,7 +27,7 @@ const component = {
         isEmpty: page.isEmpty,
 
         playerMove: page.playerMove,
-        AIMove: page.AIMove,
+        engineMove: page.engineMove,
 
         onClickSelect: page.onClickSelect,
         onClickMark: page.onClickMark,

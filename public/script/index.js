@@ -1,11 +1,13 @@
-import * as AI from '../module/ai.js';
 import { Game } from '../module/game.js';
-import { X, O, None } from '../module/marker.js';
+import { Engine } from '../module/AI.js';
 import { Size as size } from '../module/size.js';
+import { X, O, None, opponentOf } from '../module/marker.js';
 import { getMarker, getRow, getCol } from './common.js';
 
 
 const game = new Game();
+
+var engine;
 var selected;
 
 
@@ -61,21 +63,24 @@ export function isEmpty(row, col) {
 
 
 /* Move */
-export async function playerMove(row, col) {
+export async function playerMove(move) {
     if(this.isOver()) return;
     if(!this.wait) return;
 
-    game.move(row, col);
+    game.move(move);
     this.state = game.getState();
 
-    if(!this.isOver()) await this.AIMove();
+    if(!this.isOver()) await this.engineMove(move);
 }
 
-export async function AIMove() {
+export async function engineMove(prev) {
     await sleep(400);
+    const move = engine.move(prev);
 
-    const move = AI.move(game);
-    game.move(move.row, move.col);
+    // TODO: remove
+    console.log(engine.board());
+    
+    game.move(move);
     this.state = game.getState();
 }
 
@@ -87,18 +92,21 @@ function sleep(ms) {
 /* Event listener */
 export function onClickSelect(ev) {
     selected = getMarker(ev.target.id);
-    this.play = true;
+    engine = new Engine(opponentOf(selected));
     
     game.reset();
     this.state = game.getState();
 
-    if(!this.wait) this.AIMove();
+    this.play = true;
+    if(!this.wait) this.engineMove(null);
 }
 
 export function onClickMark(ev) {
     const row = getRow(ev.target.id);
     const col = getCol(ev.target.id);
-    this.playerMove(row, col);
+
+    const move = {row: row, col: col};
+    this.playerMove(move);
 }
 
 export function onClickResign(ev) {
