@@ -1,7 +1,7 @@
 import * as Result from './result.js';
 import { Size as size } from './size.js';
+import { None, opponentOf } from "./marker.js";
 import { State, New as newState } from "./state.js";
-import { Marker, None, opponentOf } from "./marker.js";
 
 
 export class Game {
@@ -13,6 +13,13 @@ export class Game {
 
     getState(): State {
         return {...this.state};
+    }
+
+    clone(): Game {
+        const copy = new Game();
+
+        copy.state = this.getState();
+        return copy;
     }
 
     reset() {
@@ -36,11 +43,15 @@ export class Game {
     }
 
     private isOver(): boolean {
+        return this.rowMarked() || this.columnMarked() || 
+            this.leftDiagonalMarked() || this.rightDiagonalMarked();
+    }
+
+    private rowMarked(): boolean {
         const board = this.state.board;
-        let marker: Marker;
 
         for(let row=0; row<size; row++) {
-            marker = board[row][0];
+            const marker = board[row][0];
             if(marker === None) continue;
 
             for(let col=1; col<size; col++) {
@@ -48,8 +59,14 @@ export class Game {
                 if(col === size-1) return true;
             }
         }
+        return false;
+    }
+
+    private columnMarked(): boolean {
+        const board = this.state.board;
+
         for(let col=0; col<size; col++) {
-            marker = board[0][col];
+            const marker = board[0][col];
             if(marker === None) continue;
 
             for(let row=1; row<size; row++) {
@@ -57,23 +74,30 @@ export class Game {
                 if(row === size-1) return true;
             }
         }
-
-        marker = board[0][0];
-        if(marker !== None) {
-            for(let row=1; row<size; row++) {
-                if(board[row][row] !== marker) break;
-                if(row == size-1) return true;
-            }
-        }
-
-        marker = board[0][size-1];
-        if(marker !== None) {
-            for(let row=1; row<size; row++) {
-                if(board[row][size-1-row] !== marker) break;
-                if(row === size-1) return true;
-            }
-        }
-
         return false;
+    }
+
+    private leftDiagonalMarked(): boolean {
+        const board = this.state.board;
+        const marker = board[0][0];
+        
+        if(marker === None) return false;
+
+        for(let row=1; row<size; row++) {
+            if(board[row][row] !== marker) return false;
+        }
+        return true;
+    }
+
+    private rightDiagonalMarked(): boolean {
+        const board = this.state.board;
+        const marker = board[0][size-1];
+
+        if(marker === None) return false;
+        
+        for(let row=1; row<size; row++) {
+            if(board[row][size-1-row] !== marker) return false;
+        }
+        return true;
     }
 };

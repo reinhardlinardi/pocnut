@@ -55,6 +55,7 @@ export function isRight(col) {
 }
 
 export function isEmpty(row, col) {
+    if(this.isOver()) return false;
     return this.state.board[row][col] === None;
 }
 
@@ -73,8 +74,8 @@ export async function playerMove(row, col) {
 export async function AIMove() {
     await sleep(400);
 
-    const square = AI.move(this.state.board);
-    game.move(square.row, square.col);
+    const move = AI.minimax(game, true);
+    game.move(move.row, move.col);
     this.state = game.getState();
 }
 
