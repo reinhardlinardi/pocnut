@@ -22,7 +22,7 @@
         <h2 class="d-flex justify-content-center x-top-container x-text">Pocnut</h2>
 
         <div class="d-flex justify-content-center x-middle-container">
-          <template v-if="!play">
+          <template v-if="menu">
             <p class="x-text">You can't win, but can you not lose?</p>
           </template>
 
@@ -34,11 +34,11 @@
               </template>
 
               <template v-else>
-                <template v-if="wait">
+                <template v-if="play">
                   Your turn to move or admit <a class="link-primary pointer" @click="onClickResign">defeat</a>.
                 </template>
                 <template v-else>
-                  Processing...
+                  Calculating...
                 </template>
               </template>
             </p>
@@ -46,12 +46,13 @@
         </div>
         
         <div class="d-flex justify-content-center">
-          <div class="container-fluid text-center x-select-container" v-if="!play">
+          <div class="container-fluid text-center x-select-container" v-if="menu">
             <div class="row">
               <div class="col">
                 <img class= "img-fluid pointer"
                   :src="`png/${x()}.png`"
                   :id="`select-${x()}`"
+                  draggable="false"
                   @click="onClickSelect"
                   :data-marker="x()"
                 >
@@ -60,6 +61,7 @@
                 <img class= "img-fluid pointer"
                   :src="`png/${o()}.png`"
                   :id="`select-${o()}`"
+                  draggable="false"
                   @click="onClickSelect"
                   :data-marker="o()"
                 >
@@ -89,6 +91,7 @@
                       :src="`png/${marker}.png`"
                       :id="`grid-r${r}-c${c}`"
                       @click="onClickMark"
+                      draggable="false"
                       :data-row="r"
                       :data-col="c"
                     >

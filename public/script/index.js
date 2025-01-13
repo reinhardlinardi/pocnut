@@ -57,16 +57,19 @@ export function isRight(col) {
 }
 
 export function isEmpty(row, col) {
-    if(this.isOver()) return false;
-    return this.state.board[row][col] === None;
+    if(this.isOver() || !this.play) return false;
+
+    const board = this.state.board;
+    return board[row][col] === None;
 }
 
 
 /* Move */
 export async function playerMove(move) {
     if(this.isOver()) return;
-    if(!this.wait) return;
+    if(!this.play) return;
 
+    this.play = false;
     game.move(move);
     this.state = game.getState();
 
@@ -74,11 +77,12 @@ export async function playerMove(move) {
 }
 
 export async function engineMove(prev) {
-    await sleep(300);
+    await sleep(400);
     const move = engine.move(prev);
 
     game.move(move);
     this.state = game.getState();
+    this.play = true;
 }
 
 function sleep(ms) {
@@ -93,9 +97,10 @@ export async function onClickSelect(ev) {
     
     game.reset();
     this.state = game.getState();
+    this.menu = false;
 
-    this.play = true;
-    if(!this.wait) await this.engineMove(null);
+    this.play = selected === this.state.move;
+    if(!this.play) await this.engineMove(null);
 }
 
 export async function onClickMark(ev) {
@@ -112,5 +117,5 @@ export function onClickResign(ev) {
 }
 
 export function onClickReset(ev) {
-    this.play = false;
+    this.menu = true;
 }

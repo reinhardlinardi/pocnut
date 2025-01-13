@@ -5,12 +5,10 @@ import * as page from './index.js';
 const component = {
     data() {
         return {
-            play: false,
+            menu: true,
+            play: true,
             state: {},
         }
-    },
-    computed: {
-        wait: page.wait,
     },
     methods: {
         x: page.x,
