@@ -8,7 +8,7 @@ import { getMarker, getRow, getCol } from './common.js';
 const game = new Game();
 
 var engine;
-var selected;
+var selected, cnt;
 
 
 /* Marker */
@@ -70,18 +70,22 @@ export async function playerMove(move) {
     if(!this.play) return;
 
     this.play = false;
+
     game.move(move);
     this.state = game.getState();
+    cnt--;
 
     if(!this.isOver()) await this.engineMove(move);
 }
 
 export async function engineMove(prev) {
-    // await sleep(400);
+    if(cnt > 1) await sleep(400);
     const move = engine.move(prev);
 
     game.move(move);
     this.state = game.getState();
+    cnt--;
+
     this.play = true;
 }
 
@@ -97,9 +101,11 @@ export async function onClickSelect(ev) {
     
     game.reset();
     this.state = game.getState();
-    this.menu = false;
 
+    this.menu = false;
     this.play = selected === this.state.move;
+
+    cnt = size*size;
     if(!this.play) await this.engineMove(null);
 }
 
