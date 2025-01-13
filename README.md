@@ -1,5 +1,5 @@
 # Pocnut
-Responsive web-based single-player Tic Tac Toe game with perfect AI based on [minimax](https://en.wikipedia.org/wiki/Minimax).  
+Responsive web-based single-player 3x3 Tic Tac Toe game with perfect AI based on [minimax](https://en.wikipedia.org/wiki/Minimax).  
 
 ## Getting Started
 
