@@ -77,7 +77,7 @@ export async function playerMove(move) {
 }
 
 export async function engineMove(prev) {
-    await sleep(400);
+    // await sleep(400);
     const move = engine.move(prev);
 
     game.move(move);
