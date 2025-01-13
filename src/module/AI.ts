@@ -50,25 +50,23 @@ export class Engine {
             }
         }
 
-        let selected = -1;
-        let optimal = INF+1;
-
-        const opp = state.move !== this.marker;
-        if(!opp) optimal *= -1;
+        const turn = state.move === this.marker;
+        let select = -1;
+        let score = turn? 2*-INF : 2*INF;
 
         // Player's optimal move = minimize score, AI's optimal move = maximize score
         moves.forEach((move, idx) => {
             const g = game.clone();
             g.move(move);
 
-            const ev = this.minimax(g, depth+1);
+            const res = this.minimax(g, depth+1);
             
-            if(!opp && ev.score > optimal || opp && ev.score < optimal) {
-                selected = idx;
-                optimal = ev.score;
+            if(turn && res.score > score || !turn && res.score < score) {
+                select = idx;
+                score = res.score;
             }
         });
 
-        return {move: moves[selected], score: optimal};
+        return {move: moves[select], score: score};
     }
 };
